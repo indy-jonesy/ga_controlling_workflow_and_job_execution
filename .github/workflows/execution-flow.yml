@@ -13,7 +13,7 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -29,12 +29,12 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
-      - name: Run Tests
+      - name: Test code
         id: run-tests
         run: npm run test
       - name: Upload test report
@@ -53,7 +53,7 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -78,13 +78,12 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
-
   report:
     needs: [lint, deploy]
     if: failure()
     runs-on: ubuntu-latest
     steps:
       - name: Output information
-        run: |
-          echo "Something went wrong!"
+        run: | 
+          echo "Something went wrong"
           echo "${{ toJSON(github) }}"
